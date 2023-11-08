@@ -1,3 +1,7 @@
+import sqlite3
+import inventory
+
+
 class Menu:
     def __init__(self):
         self.loggedin = False # placeholder for the time being.
@@ -10,7 +14,7 @@ class Menu:
             print("2. Create Account")
             print("3. Exit")
 
-            user_choice = input("Please enter what you would like to do: ")
+            user_choice = int(input("Please enter what you would like to do: "))
 
             if user_choice == "1":
                 if not self.loggedin:
@@ -24,3 +28,26 @@ class Menu:
                 break
             else:
                 print("Invalid choice. Try again.")
+
+    def after_login_menu(self):
+        while True:
+            print("Here i")
+            print("1. View Account Information")
+            print("2. Inventory Information")
+            print("3. Cart Information")
+            print("4. Logout")
+
+            user_choice = int(input("Enter your choice: "))
+
+            if user_choice == "1":
+                #add in logic for viewing account info
+            elif user_choice == "2":
+                # add in logic for looking at inventory infortmation
+            elif user_choice == "3":
+                # add in logic for viewing cart information
+            elif user_choice == "4":
+                print("Bye!")
+                break
+            else:
+                print("Invalid choice. Try again.")
+    

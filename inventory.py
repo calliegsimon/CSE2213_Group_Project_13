@@ -11,6 +11,9 @@ class Inventory:
         # note: a cursor allows you to execute your sql queries
         
     def decreaseStock(self, ISBN): # the decrease stock method, decreases the stock quantity of a product in the inventory by one
+        #Called with a single ISBN parameter and decreases the
+        #stock number in the appropriate database for the appropriate ISBN
+
 
         # make a sql update query to decrease the quantity of a product in the table by one
         # `self.table_name` is the name of the table where product information is stored
@@ -25,6 +28,7 @@ class Inventory:
 
     def viewInventory(self): 
         # method to display all of the items in the inventory
+        #Displays all items in the inventory in some formatted way
 
         # make a sql select query in order to get all the data from the table
         select_query = f"SELECT * FROM {self.table_name};"
@@ -44,6 +48,8 @@ class Inventory:
     
     def searchInventory(self, title):
         # method in order to search for specfic products based on titles
+        #Asks for a *title*, checks the database to see if a result is returned on
+        #that name. If so, display all results. If not, the user is informed their search failed
         search_query = f"SELECT * FROM {self.table_name} WHERE name LIKE ?;"# make a sql select query in order to get all the data from the table
         self.cursor.execute(search_query, (f"%{title}%",))# execute the sql query using the cursor and parameters
         products = self.cursor.fetchall() # fetch all the results returned by the query
