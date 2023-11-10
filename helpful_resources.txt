@@ -1,0 +1,4 @@
+Python and SQLite:
+ 1. https://docs.python.org/3/library/sqlite3.html
+ 2. https://www.geeksforgeeks.org/introduction-to-sqlite-in-python/?ref=lbp
+ 3. https://www.geeksforgeeks.org/python-sqlite/?ref=shm

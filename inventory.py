@@ -1,5 +1,8 @@
 import sqlite3
 
+
+
+
 class Inventory:
     # class constructor
     def __init__(self, db_name, table_name):
@@ -31,33 +34,19 @@ class Inventory:
         #Displays all items in the inventory in some formatted way
 
         # make a sql select query in order to get all the data from the table
-        select_query = f"SELECT * FROM {self.table_name};"
-        self.cursor.execute(select_query) # execute the sql query using the cursor
-        products = self.cursor.fetchall() # fetch all the results returned by the query
-        # the fetchall method retrieves all the rows as a list of tuples
 
-        #check if there are any products in the inventory
-        if products:
-            #if there are products iterate through each product and print their info
-            for product in products:
-                # `product` is a tuple containing information about a single product
-                print(f"ID: {product[0]}, Name: {product[1]}, Price: {product[2]}, Quantity: {product[3]}")
-        else:
-            # if there are no products
-            print("Inventory is empty.")
-    
     def searchInventory(self, title):
         # method in order to search for specfic products based on titles
         #Asks for a *title*, checks the database to see if a result is returned on
         #that name. If so, display all results. If not, the user is informed their search failed
-        search_query = f"SELECT * FROM {self.table_name} WHERE name LIKE ?;"# make a sql select query in order to get all the data from the table
+        search_query = f"SELECT * FROM {self.table_name} WHERE Title LIKE ?;"# make a sql select query in order to get all the data from the table
         self.cursor.execute(search_query, (f"%{title}%",))# execute the sql query using the cursor and parameters
         products = self.cursor.fetchall() # fetch all the results returned by the query
         if products:
-            print("Search results:")
             for product in products:
-                # if there are products iterate through each product and print their info
-                print(f"ID: {product[0]}, Name: {product[1]}, Price: {product[2]}, Quantity: {product[3]}")
+               # if there are products iterate through each product and print their info
+                print(f"ISBN: {product[0]}, Title: {product[1]}, Author: {product[2]}, Genre: {product[3]}, Pages: {products[4]},
+                      ReleaseDate: {products[5]}, Stock: {products[6]}")
         else:
             # if there are no products
             print(f"No products found with the title: {title}")
