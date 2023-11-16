@@ -1,6 +1,6 @@
 import sqlite3
 import inventory
-
+import cart
 
 class Menu:
     def __init__(self):
