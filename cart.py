@@ -26,6 +26,19 @@ class cart:
     def addToCart(self, userID, ISBN):
         # use selected ISBN to add to user's cart
 
+        # these two variables are created because of similarly named columns in the cart table
+        bookID = ISBN
+        customerID = userID
+
+        # updating quantity if book is already in the cart
+        if bookID in Cart:
+            self.cursor.execute(UPDATE Cart SET Quantity = Quantity + 1 WHERE ISBN = bookID)
+
+            # if book is not already in cart
+            else:
+                self.cursor.execute(INSERT INTO Cart (UserID, ISBN, Quantity) VALUES (customerID, bookID, 1))
+
+
     def removeFromCart(self, userID, ISBN):
         # use selected ISBN to remove from user's cart
         
