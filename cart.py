@@ -23,6 +23,24 @@ class cart:
     def viewCart(self, userID, inventoryDatabase):
         # displays all books in logged in user's cart
 
+        # select data from cart table
+        self.cursor.execute("SELECT ISBN, Quantity FROM Cart WHERE UserID = userID")
+
+        # select data from cart table
+        
+
+        # fetch all books in cart
+        books = self.cursor.fetchall()
+
+        print (f"{userID}'s cart:")
+        
+        # print the books in cart
+        for book in books:
+            print (book) # only prints ISBN and Quantity
+                         # need to fix to print Title and Author too (get from InventoryDB)
+            
+        print (f"ISBN: {ISBN}, Title: {}, Author: {Author}, Quantity: {Quantity}")
+
     def addToCart(self, userID, ISBN):
         # use selected ISBN to add to user's cart
 
@@ -32,11 +50,14 @@ class cart:
 
         # updating quantity if book is already in the cart
         if bookID in Cart:
-            self.cursor.execute(UPDATE Cart SET Quantity = Quantity + 1 WHERE ISBN = bookID)
+            self.cursor.execute("UPDATE Cart SET Quantity = Quantity + 1 WHERE ISBN = bookID")
 
             # if book is not already in cart
             else:
-                self.cursor.execute(INSERT INTO Cart (UserID, ISBN, Quantity) VALUES (customerID, bookID, 1))
+                self.cursor.execute("INSERT INTO Cart (UserID, ISBN, Quantity) VALUES (customerID, bookID, 1)")
+
+        # save changes to table
+        self.cursor.commit()
 
 
     def removeFromCart(self, userID, ISBN):
