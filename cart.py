@@ -1,15 +1,5 @@
 import sqlite3
-import sys
 import inventory
-
-try:
-    connection = sqlite3.connect(Store_Database.db)
-    print("successful connection")
-
-except:
-    print("failed connection")
-    sys.exit()
-
 
 # makes cart class
 class cart:
@@ -37,6 +27,7 @@ class cart:
         print (f"{userID}'s cart:")
         
         # print the books in cart
+        # expected to output ISBN, title, author, and quantity for each book in cart
         for book in books:
             print(book)
 
@@ -78,3 +69,12 @@ class cart:
     def checkOut(self, userID):
         # calls decreaseStock function from inventory class
         # removes all items in user's cart
+        
+        #decreaseStock(ISBN) for every book in cart
+        
+        # once all stock has been decreased
+        checkOut_query = f"DELETE FROM {self.table_name} WHERE UserID = {userID}"
+        self.cursor.execute(checkOut_query)
+
+        # save changes
+        self.cursor.commit()
