@@ -1,5 +1,6 @@
 import sqlite3
 import sys
+import inventory
 
 try:
     connection = sqlite3.connect(Store_Database.db)
@@ -23,11 +24,12 @@ class cart:
     def viewCart(self, userID, inventoryDatabase):
         # displays all books in logged in user's cart
 
-        # select data from cart table
-        self.cursor.execute("SELECT ISBN, Quantity FROM Cart WHERE UserID = userID")
-
-        # select data from cart table
+        view_query = f"SELECT ISBN, Title, Author, Quantity 
+        FROM {self.table_name} INNER JOIN {inventoryDatabase} 
+        ON {self.table_name}.ISBN = {inventoryDatabase}.ISBN
+        WHERE UserID = {userID}"
         
+        self.cursor.execute(view_query)
 
         # fetch all books in cart
         books = self.cursor.fetchall()
@@ -36,11 +38,10 @@ class cart:
         
         # print the books in cart
         for book in books:
-            print (book) # only prints ISBN and Quantity
-                         # need to fix to print Title and Author too (get from InventoryDB)
-            
-        print (f"ISBN: {ISBN}, Title: {}, Author: {Author}, Quantity: {Quantity}")
+            print(book)
 
+        # i think this is done, need to check that it runs as expected
+    
     def addToCart(self, userID, ISBN):
         # use selected ISBN to add to user's cart
 
@@ -48,13 +49,15 @@ class cart:
         bookID = ISBN
         customerID = userID
 
+        # need to check that given book is in the right user's cart
         # updating quantity if book is already in the cart
         if bookID in Cart:
-            self.cursor.execute("UPDATE Cart SET Quantity = Quantity + 1 WHERE ISBN = bookID")
+            add_query = f"UPDATE Cart SET Quantity = Quantity + 1 WHERE ISBN = {bookID}"
+            self.cursor.execute(add_query, (f"%{bookID}%",))
 
-            # if book is not already in cart
-            else:
-                self.cursor.execute("INSERT INTO Cart (UserID, ISBN, Quantity) VALUES (customerID, bookID, 1)")
+        # if book is not already in cart
+        else:
+            self.cursor.execute("INSERT INTO Cart (UserID, ISBN, Quantity) VALUES (customerID, bookID, 1)")
 
         # save changes to table
         self.cursor.commit()
@@ -62,6 +65,15 @@ class cart:
 
     def removeFromCart(self, userID, ISBN):
         # use selected ISBN to remove from user's cart
+        if bookID in Cart:
+            self.cursor.execute("UPDATE Cart SET Quantity = Quantity - 1 WHERE ISBN = bookID")
+            self.cursor.execute("DELETE FROM Cart WHERE Quantity = '0'") # deletes the book from cart if quantity=0
+
+        else: 
+            print("Selected book is not in cart, so it's not possible to remove")
+
+        # save changes
+        self.cursor.commit()
         
     def checkOut(self, userID):
         # calls decreaseStock function from inventory class
