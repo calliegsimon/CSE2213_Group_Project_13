@@ -44,7 +44,44 @@ class Menu:
             elif user_choice == "2":
                 # add in logic for looking at inventory infortmation
             elif user_choice == "3":
-                # add in logic for viewing cart information
+                # cart information
+                print("Cart Information Menu")
+                print("1. Go Back")
+                print("2. View Cart")
+                print("3. Add Items to Cart")
+                print("4. Remove an Item From Cart")
+                print("5. Check Out")
+
+                cart_choice = int(input("Enter your choice: "))
+
+                myCart = cart('Store_Database.db', 'Cart')  # creates a cart class object
+                                                                # do we need to move this to a main file?
+                    
+                if cart_choice == "1":
+                    # go back
+                elif cart_choice == "2":
+                    # view cart
+                    myCart.viewCart(userID, 'Store_Database.db') # does "Store_Database.db" need to be changed to "Cart"
+                        
+                elif cart_choice == "3":
+                    # add to cart
+                    myInventory.viewInventory()
+                    book_add = int(input("Enter the ISBN of the book you want to add to your cart: "))
+                    myCart.addToCart(userID, book_add)
+
+                elif cart_choice == "4":
+                    # remove from cart
+                    myCart.viewCart(userID, 'Store_Database.db') # same note as when cart_choice == "2"
+                    book_remove = int(input("Enter the ISBN of the book you want to remove from your cart: "))
+                    myCart.removeFromCart(userID, book_remove)
+                        
+                elif cart_choice == "5":
+                    # check out
+                    myCart.checkOut(userID)
+                        
+                else:
+                    print("Invalid choice.")
+                
             elif user_choice == "4":
                 print("Bye!")
                 break
