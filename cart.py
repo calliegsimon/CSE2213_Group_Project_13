@@ -36,13 +36,17 @@ class cart:
     def addToCart(self, userID, ISBN):
         # use selected ISBN to add to user's cart
 
-        # these two variables are created because of similarly named columns in the cart table
-        bookID = ISBN
+        # variables created because of similar names to columns in table
         customerID = userID
+        bookID = ISBN
 
-        # need to check that given book is in the right user's cart
+        checking_Cart = f"SELECT ISBN FROM {self.table_name} WHERE UserID = {customerID}"
+        self.cursor.execute(checking_Cart)
+
+        customerCart = self.cursor.fetchall()
+        
         # updating quantity if book is already in the cart
-        if bookID in Cart:
+        if bookID in customerCart:
             add_query = f"UPDATE Cart SET Quantity = Quantity + 1 WHERE ISBN = {bookID}"
             self.cursor.execute(add_query, (f"%{bookID}%",))
 
@@ -56,7 +60,15 @@ class cart:
 
     def removeFromCart(self, userID, ISBN):
         # use selected ISBN to remove from user's cart
-        if bookID in Cart:
+
+        
+        checkCart_query = f"SELECT ISBN FROM {self.table_name} where UserID = {userID}"
+        self.cursor.execute(checkCart_query)
+
+        userCart = self.cursor.fetchall()
+
+        # checks that given book is in cart
+        if ISBN in userCart:
             self.cursor.execute("UPDATE Cart SET Quantity = Quantity - 1 WHERE ISBN = bookID")
             self.cursor.execute("DELETE FROM Cart WHERE Quantity = '0'") # deletes the book from cart if quantity=0
 
@@ -78,3 +90,4 @@ class cart:
 
         # save changes
         self.cursor.commit()
+
