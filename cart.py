@@ -111,9 +111,11 @@ class cart:
 
     def closeConnection(self):
         self.connection.close()
+        self.cursor.close()
 # outside class
 myCart = cart("Store_Database.db", "Cart")
 myCart.addToCart("anw734", 9781501142970)
 myCart.viewCart("anw734", "Inventory")
+myCart.closeConnection()
 
 
