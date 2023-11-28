@@ -1,5 +1,5 @@
 import sqlite3
-import inventory
+import Inventory
 
 # makes cart class
 class cart:
@@ -57,7 +57,7 @@ class cart:
 
     def removeFromCart(self, userID, ISBN):
         # use selected ISBN to remove from user's cart
-
+        
         
         checkCart_query = f"SELECT ISBN FROM {self.table_name} where UserID = {userID}"
         self.cursor.execute(checkCart_query)
@@ -65,8 +65,8 @@ class cart:
         userCart = self.cursor.fetchall()
 
         # checks that given book is in cart
-        if ISBN in userCart:
-            remove_query = f"UPDATE Cart SET Quantity = Quantity - 1 WHERE ISBN = {bookID}"
+        if {self.table_name}.ISBN in userCart:
+            remove_query = f"UPDATE Cart SET Quantity = Quantity - 1 WHERE ISBN = {ISBN}"
             self.cursor.execute(remove_query)
             self.cursor.execute("DELETE FROM Cart WHERE Quantity = '0'") # deletes the book from cart if quantity=0
 
@@ -80,15 +80,20 @@ class cart:
         # calls decreaseStock function from inventory class
         # removes all items in user's cart
         
+        cart_inven = Inventory("Store_Database.db", "Inventory") # creates an inventory class object so we can call decreaseStock
+        
         #decreaseStock(ISBN) for every book in cart
         decrease_query = f"SELECT ISBN, Quantity FROM {self.table_name} WHERE UserID = {userID}"
         self.cursor.execute(decrease_query)
 
         dec = self.cursor.fetchall()
+        
         for row in dec:
-            while quantity > 0:
-                decreaseStock(ISBN)
-                num_update = f"UPDATE Cart SET Quantity = Quantity - 1 WHERE ISBN = {ISBN}"
+            book = {self.table_name}.ISBN
+
+            while {self.table_name}.Quantity > 0:
+                cart_inven.decreaseStock(book)
+                num_update = f"UPDATE Cart SET Quantity = Quantity - 1 WHERE ISBN = {book}"
                 self.cursor.execute(num_update)
         
         # once all stock has been decreased
@@ -98,3 +103,7 @@ class cart:
         # save changes
         self.cursor.commit()
 
+# outside class
+myCart = cart("Store_Database.db", "Cart")
+myCart.addToCart("anw734", 9781501142970)
+myCart.viewCart("anw734", "Inventory")
