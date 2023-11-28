@@ -3,4 +3,5 @@ Python and SQLite:
  2. https://www.geeksforgeeks.org/introduction-to-sqlite-in-python/?ref=lbp
  3. https://www.geeksforgeeks.org/python-sqlite/?ref=shm
  4. https://realpython.com/python-formatted-output/
+ 5. https://docs.python.org/3/library/re.html
  

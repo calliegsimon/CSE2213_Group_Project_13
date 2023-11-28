@@ -2,7 +2,6 @@ import sqlite3
 
 
 
-
 class Inventory:
     # class constructor
     def __init__(self, db_name, table_name):
@@ -20,8 +19,8 @@ class Inventory:
 
         # make a sql update query to decrease the quantity of a product in the table by one
         # `self.table_name` is the name of the table where product information is stored
-        # the 'quantity' column should be decreased by 1 for the product with a matching ISBN
-        update_query = f"UPDATE {self.table_name} SET quantity = quantity - 1 WHERE ISBN = ?;"
+        # the 'stock' column should be decreased by 1 for the product with a matching ISBN
+        update_query = f"UPDATE {self.table_name} SET Stock = Stock - 1 WHERE ISBN = ?;"
         self.cursor.execute(update_query, (ISBN,)) #executes the query using the cursor and uses isbn as a parameter to be inserted into the query
         # the `execute` method of the cursor runs the sql query with the provided parameter(s)
 
@@ -43,12 +42,11 @@ class Inventory:
         #create an if loop for if there are products found (There definitely should be lol)
         if products:
             #set up the format for printing out the inventory
-            print("{:<15} {:<30} {:<20} {:<15} {:<10} {:<15} {:<10}".format("ISBN", "Title", "Author", "Genre", "Release Date", "Stock"))
-            print("-" * 120)
+            
             # for loop to iterate through the products and display all of the info 
             for product in products:
-                print("{:<15} {:<30} {:<20} {:<15} {:<10} {:<15} {:<10}".format(product[0], product[1],
-                        product[2], product[3], product[4], product[5], product[6]))
+               # if there are products iterate through each product and print their info
+                print(f"ISBN: {product[0]}, Title: {product[1]}, Author: {product[2]}, Genre: {product[3]}, Pages: {product[4]}, ReleaseDate: {product[5]}, Stock: {product[6]}")
         else:
             print("Your inventory is empty")
 
@@ -62,8 +60,7 @@ class Inventory:
         if products:
             for product in products:
                # if there are products iterate through each product and print their info
-                print(f"ISBN: {product[0]}, Title: {product[1]}, Author: {product[2]}, Genre: {product[3]}, Pages: {product[4]},
-                      ReleaseDate: {product[5]}, Stock: {product[6]}")
+                print(f"ISBN: {product[0]}, Title: {product[1]}, Author: {product[2]}, Genre: {product[3]}, Pages: {product[4]}, ReleaseDate: {product[5]}, Stock: {product[6]}")
         else:
             # if there are no products
             print(f"No products found with the title: {title}")
@@ -89,5 +86,3 @@ class Inventory:
     def set_table_name(self, new_table_name):
         self.table_name = new_table_name
 
-    
-    

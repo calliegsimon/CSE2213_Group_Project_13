@@ -44,7 +44,6 @@ class Menu:
             elif user_choice == "2":
                 # add in logic for looking at inventory infortmation
                 print("Invetory Information Menu")
-                print("-" * 50)
                 print("1. Go Back")
                 print("2. View Inventory")
                 print("3. Search Inventory")
