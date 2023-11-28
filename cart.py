@@ -14,10 +14,7 @@ class cart:
     def viewCart(self, userID, inventoryDatabase):
         # displays all books in logged in user's cart
 
-        view_query = f"SELECT ISBN, Title, Author, Quantity 
-        FROM {self.table_name} INNER JOIN {inventoryDatabase} 
-        ON {self.table_name}.ISBN = {inventoryDatabase}.ISBN
-        WHERE UserID = {userID}"
+        view_query = f"SELECT {self.table_name}.ISBN, Title, Author, Quantity FROM {self.table_name} INNER JOIN {inventoryDatabase} ON {self.table_name}.ISBN = {inventoryDatabase}.ISBN WHERE UserID = {userID}"
         
         self.cursor.execute(view_query)
 
@@ -73,7 +70,7 @@ class cart:
             self.cursor.execute("DELETE FROM Cart WHERE Quantity = '0'") # deletes the book from cart if quantity=0
 
         else: 
-            print("Selected book is not in cart, so it's not possible to remove")
+            print("Selected book not in cart. Unable to remove.")
 
         # save changes
         self.cursor.commit()
