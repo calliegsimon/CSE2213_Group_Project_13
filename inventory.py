@@ -32,8 +32,25 @@ class Inventory:
     def viewInventory(self): 
         # method to display all of the items in the inventory
         #Displays all items in the inventory in some formatted way
-
+        
         # make a sql select query in order to get all the data from the table
+        select_q = f"SELECT * FROM {self.table_name}"
+        self.cursor.execute(select_q)
+
+        #get all results from the table
+        products = self.cursor.fetchall()
+
+        #create an if loop for if there are products found (There definitely should be lol)
+        if products:
+            #set up the format for printing out the inventory
+            print("{:<15} {:<30} {:<20} {:<15} {:<10} {:<15} {:<10}".format("ISBN", "Title", "Author", "Genre", "Release Date", "Stock"))
+            print("-" * 120)
+            # for loop to iterate through the products and display all of the info 
+            for product in products:
+                print("{:<15} {:<30} {:<20} {:<15} {:<10} {:<15} {:<10}".format(product[0], product[1],
+                        product[2], product[3], product[4], product[5], product[6]))
+        else:
+            print("Your inventory is empty")
 
     def searchInventory(self, title):
         # method in order to search for specfic products based on titles
@@ -45,8 +62,8 @@ class Inventory:
         if products:
             for product in products:
                # if there are products iterate through each product and print their info
-                print(f"ISBN: {product[0]}, Title: {product[1]}, Author: {product[2]}, Genre: {product[3]}, Pages: {products[4]},
-                      ReleaseDate: {products[5]}, Stock: {products[6]}")
+                print(f"ISBN: {product[0]}, Title: {product[1]}, Author: {product[2]}, Genre: {product[3]}, Pages: {product[4]},
+                      ReleaseDate: {product[5]}, Stock: {product[6]}")
         else:
             # if there are no products
             print(f"No products found with the title: {title}")

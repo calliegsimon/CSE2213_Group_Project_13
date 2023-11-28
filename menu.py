@@ -43,6 +43,28 @@ class Menu:
                 #add in logic for viewing account info
             elif user_choice == "2":
                 # add in logic for looking at inventory infortmation
+                print("Invetory Information Menu")
+                print("-" * 50)
+                print("1. Go Back")
+                print("2. View Inventory")
+                print("3. Search Inventory")
+
+
+                inv_choice = int(input("Please enter your choice:  "))
+
+                if inv_choice == "1":
+                    #go back
+                    break
+                    # adding the break statement should return it back to the main menu. 
+                elif inv_choice == "2":
+                    inventory.viewInventory()
+                elif inv_choice == "3":
+                    print("Please enter the title of the book you are looking for: ")
+                    search_title = str(input("Please enter the title of the book you are looking for: "))
+                    inventory.searchInventory(search_title)
+                else:
+                    print("Invalid choice.")
+
             elif user_choice == "3":
                 # cart information
                 print("Cart Information Menu")
@@ -62,7 +84,7 @@ class Menu:
                 elif cart_choice == "2":
                     # view cart
                     myCart.viewCart(userID, 'Store_Database.db') # does "Store_Database.db" need to be changed to "Cart"
-                        
+
                 elif cart_choice == "3":
                     # add to cart
                     myInventory.viewInventory()
