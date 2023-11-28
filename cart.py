@@ -66,7 +66,8 @@ class cart:
 
         # checks that given book is in cart
         if ISBN in userCart:
-            self.cursor.execute("UPDATE Cart SET Quantity = Quantity - 1 WHERE ISBN = bookID")
+            remove_query = f"UPDATE Cart SET Quantity = Quantity - 1 WHERE ISBN = {bookID}"
+            self.cursor.execute(remove_query)
             self.cursor.execute("DELETE FROM Cart WHERE Quantity = '0'") # deletes the book from cart if quantity=0
 
         else: 
@@ -80,6 +81,15 @@ class cart:
         # removes all items in user's cart
         
         #decreaseStock(ISBN) for every book in cart
+        decrease_query = f"SELECT ISBN, Quantity FROM {self.table_name} WHERE UserID = {userID}"
+        self.cursor.execute(decrease_query)
+
+        dec = self.cursor.fetchall()
+        for row in dec:
+            while quantity > 0:
+                decreaseStock(ISBN)
+                num_update = f"UPDATE Cart SET Quantity = Quantity - 1 WHERE ISBN = {ISBN}"
+                self.cursor.execute(num_update)
         
         # once all stock has been decreased
         checkOut_query = f"DELETE FROM {self.table_name} WHERE UserID = {userID}"
