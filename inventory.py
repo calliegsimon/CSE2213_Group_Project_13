@@ -15,13 +15,9 @@ class Inventory:
     def decreaseStock(self, ISBN): # the decrease stock method, decreases the stock quantity of a product in the inventory by one
         #Called with a single ISBN parameter and decreases the
         #stock number in the appropriate database for the appropriate ISBN
-
-
         # make a sql update query to decrease the quantity of a product in the table by one
-        # `self.table_name` is the name of the table where product information is stored
-        # the 'stock' column should be decreased by 1 for the product with a matching ISBN
         update_query = f"UPDATE {self.table_name} SET Stock = Stock - 1 WHERE ISBN = ?;"
-        self.cursor.execute(update_query, (ISBN,)) #executes the query using the cursor and uses isbn as a parameter to be inserted into the query
+        self.cursor.execute(update_query, (ISBN)) #executes the query using the cursor and uses isbn as a parameter to be inserted into the query
         # the `execute` method of the cursor runs the sql query with the provided parameter(s)
 
         # commit the updates to the db
