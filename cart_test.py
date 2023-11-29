@@ -7,22 +7,29 @@ from cart import cart
 class TestCart_Inventory:
 
     @pytest.fixture
+
     def setup_test(self):
-        db_name = "Store_Database.db"
-        test_cart_table = "Test_Cart"
-        test_inv_table = "Test_Inventory"
-        connection = sqlite3.connect(db_name)
-        cursor = connection.cursor()
+        test_cart = cart("Store_Database.db", "Cart")
+        test_inven = Inventory("Store_Database.db", "Inventory")
 
-        yield cart(db_name, test_cart_table), Inventory(db_name,test_inv_table)
+        yield test_cart, test_inven
 
-        cursor.close()
-        connection.close()
+        test_cart.closeConnection()
+        test_inven.close_connection()
 
 
-    def test_checkOut_decreaseStock(self, setup_test):
-        cart, inventory = setup_test
+    def test_checkOut_decreaseStock(self, capsys):
+        test_inven = Inventory("anw734", "Inventory")
 
-        cart.addToCart
+        test_cart = cart("Store_Database.db", "Cart")
+        test_cart.addToCart("anw734", 9780307278449)
+        test_cart.addToCart("anw734", 9780307278449)
+        test_cart.checkOut("anw734")
+
+        #verify
+        test_inven.cursor.execute(f"SELECT Stock FROM {test_inven.table_name} WHERE ISBN = '9780307278449';")
+
+        result = test_inven.cursor.fetchone()
+        assert result[0] == 7
 
 
