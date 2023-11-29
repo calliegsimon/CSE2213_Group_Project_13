@@ -1,12 +1,7 @@
 import sqlite3
 import inventory
 import cart
-import account
-
-
-
-        self.loggedin = False # placeholder for the time being.
-        #be sure to implement the user sign in/ authentication
+import Account
 
 #creating class objects and variables
 acct = Account()
@@ -14,6 +9,7 @@ myCart = cart('Store_Database.db', 'Cart')
 storeInven = Inventory('Store_Database.db', 'Inventory')
 username = ""
 password = ""
+
 def afterLogin():
         # after login menu
         while True:
@@ -27,6 +23,8 @@ def afterLogin():
 
                 if user_choice == "1":
                     #add in logic for viewing account info
+                    acct.displayAccount()
+                
                 elif user_choice == "2":
                     # add in logic for looking at inventory infortmation
                     print("Invetory Information Menu")
