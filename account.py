@@ -106,5 +106,7 @@ class Account:
         self.isAdmin = admin
         cur.execute("UPDATE Account SET IsAdmin=? WHERE Username=?", params)
         con.commit()
-        
+
+    def loginCheck(self):
+        return self.loggedIn
 con.close()
