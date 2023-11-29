@@ -3,20 +3,16 @@ import inventory
 import cart
 import account
 
-
-
-        self.loggedin = False # placeholder for the time being.
-        #be sure to implement the user sign in/ authentication
-
 #creating class objects and variables
-acct = Account()
-myCart = cart('Store_Database.db', 'Cart')
-storeInven = Inventory('Store_Database.db', 'Inventory')
+acct = account.Account()
+myCart = cart.cart('Store_Database.db', 'Cart')
+storeInven = inventory.Inventory('Store_Database.db', 'Inventory')
 username = ""
 password = ""
+
 def afterLogin():
         # after login menu
-        while True:
+        while user.loginCheck() is True:
                 print("Main Menu")
                 print("1. View Account Information")
                 print("2. Inventory Information")
@@ -25,10 +21,39 @@ def afterLogin():
 
                 user_choice = int(input("Enter your choice: "))
 
-                if user_choice == "1":
-                    #add in logic for viewing account info
+                if user_choice is 1:
+                        while True:
+                                acct.displayAccount()
+                                print("1. Go back")
+                                print("2. Edit name")
+                                print("3. Edit address")
+                                print("4. Edit email address")
+                                print("5. Edit payment info")
+                                print("6. Delete account")
+                                acct_choice = int(input("Enter your choice: ")
+
+                                if acct_choice is 1:
+                                        break
+                                elif acct_choice is 2:
+                                        name = input("Enter the new name: ")
+                                        acct.nameEdit(name)
+                                elif acct_choice is 3:
+                                        add = input("Enter the new address: ")
+                                        acct.addressEdit(add)
+                                elif acct_choice is 4:
+                                        email = input("Enter the new email address: ")
+                                        acct.emailEdit(email)
+                                elif acct_choice is 5:
+                                        pay = input("Enter the new payment information: ")
+                                        acct.paymentEdit(pay)
+                                elif acct_choice is 6:
+                                        acct.deleteAccount()
+                                        break
+                                else:
+                                        print("Invalid option. Try again.")
+                        
                 elif user_choice == "2":
-                    # add in logic for looking at inventory infortmation
+                    # inventory menu
                     print("Invetory Information Menu")
                     print("1. Go Back")
                     print("2. View Inventory")
@@ -51,7 +76,7 @@ def afterLogin():
                         print("Invalid choice.")
 
                 elif user_choice == "3":
-                    # cart information
+                    # cart menu
                     print("Cart Information Menu")
                     print("1. Go Back")
                     print("2. View Cart")
@@ -101,7 +126,7 @@ while True:
         print("Welcome to our online store!")
         print("1. Login")
         print("2. Create Account")
-        print("3. Logout")
+        print("3. Exit")
 
 
         user_choice = int(input("Please enter what you would like to do: "))
@@ -122,16 +147,14 @@ while True:
                 username = input("What would you like your username to be? ")
                 password = input("What would you like your password to be? ")
                 acct.createAccount(username, password)
-                print("Account has been created, and you have been logged in.")
-                afterLogin() # takes user to after login menu
-                
+                if acct.loginCheck is True:     
+                        print("Account has been created, and you have been logged in.")
+                        afterLogin() # takes user to after login menu
+                        
         elif user_choice == "3":
-                if acct.logOut() == True:
-                        print("You have been logged out. Bye!")
-                        break
-                else:
-                        print("You weren't logged in. Exiting Program.")
-                        break
+                #i figure this should be fine because there's no way to get to the acct creation/login screen while logged in. 
+                print("Bye!")
+                break
                 
         else:
                 print("Invalid choice. Try again.")

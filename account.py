@@ -29,20 +29,19 @@ class Account:
         for name in res.fetchall():
             if name[0] == username:
                 print("Username already exists. Please choose another.")
-                matches = True
-                break
-        if matches is False:
-            print("Username is unique! Please enter the following information: ")
-            self.fullName = input("Your full name: ")
-            self.fullAddress = input("Your full address (street, city, state zipcode): ")
-            self.email = input("Your email address: ")
-            self.payment = input("Your payment info (card number:)")
-            self.isAdmin = int(input("Your admin status (0: not an admin 1: an admin): "))
-            self.loggedIn = True
-            cur.execute("""
-                   INSERT INTO Account(Username, Password, Name, Address, Email, Payment, IsAdmin) VALUES
-                       (?, ?, ?, ?, ?, ?, ?)""", (username, password, self.fullName, self.fullAddress, self.email, self.payment, self.isAdmin))
-            con.commit()
+                return False
+        print("Username is unique! Please enter the following information: ")
+        self.fullName = input("Your full name: ")
+        self.fullAddress = input("Your full address (street, city, state zipcode): ")
+        self.email = input("Your email address: ")
+        self.payment = input("Your payment info (card number:)")
+        self.isAdmin = int(input("Your admin status (0: not an admin 1: an admin): "))
+        self.loggedIn = True
+        cur.execute("""
+            INSERT INTO Account(Username, Password, Name, Address, Email, Payment, IsAdmin) VALUES
+            (?, ?, ?, ?, ?, ?, ?)""", (username, password, self.fullName, self.fullAddress, self.email, self.payment, self.isAdmin))
+        con.commit()
+        return True
 
     def logIn(self, username, password):
         global cur, con
@@ -58,13 +57,14 @@ class Account:
                 self.email = data[2]
                 self.payment = data[3]
                 self.isAdmin = data[4]
-                break
-        else:
-            print("Error with username or password. Please try again.")
+                return True
+        print("Error with username or password. Please try again.")
+        return False
 
     def logOut(self):
         if self.loggedIn is True:
             self.loggedIn = False
+            return True
         else:
             print("How did you get this? You can't log out if you aren't logged in??")
 
@@ -107,6 +107,21 @@ class Account:
         cur.execute("UPDATE Account SET IsAdmin=? WHERE Username=?", params)
         con.commit()
 
+    def deleteAccount(self):
+        cur.execute("DELETE FROM Account WHERE Username=?", self.username)
+        con.commit()
+        self.loggedIn = False
+        self.username = ""
+        self.password = ""
+        self.fullName = ""
+        self.fullAddress = ""
+        self.email = ""
+        self.payment = ""
+        self.isAdmin = 0
+
     def loginCheck(self):
         return self.loggedIn
+
+    def getUsername(self):
+        return self.username
 con.close()

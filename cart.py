@@ -1,5 +1,5 @@
 import sqlite3
-from inventory import Inventory
+import inventory
 
 # makes cart class
 class cart:
@@ -109,7 +109,8 @@ class cart:
         # calls decreaseStock function from inventory class
         # removes all items in user's cart
         
-        cart_inven = Inventory("Store_Database.db", "Inventory") # creates an inventory class object so we can call decreaseStock
+        # creates an inventory class object so we can call decreaseStock
+        cart_inven = inventory.Inventory("Store_Database.db", "Inventory") 
         
         #decreaseStock(ISBN) for every book in cart
         decrease_query = f"SELECT ISBN, Quantity FROM {self.table_name} WHERE UserID = '{userID}'"
@@ -133,4 +134,3 @@ class cart:
     def closeConnection(self):
         self.cursor.close()
         self.connection.close()
-        
