@@ -9,7 +9,7 @@ import account
         #be sure to implement the user sign in/ authentication
 
 #creating class objects and variables
-# account class object: acct = account('account.db', 'Account')
+acct = Account()
 myCart = cart('Store_Database.db', 'Cart')
 storeInven = Inventory('Store_Database.db', 'Inventory')
 username = ""
@@ -101,7 +101,7 @@ while True:
         print("Welcome to our online store!")
         print("1. Login")
         print("2. Create Account")
-        print("3. Exit")
+        print("3. Logout")
 
 
         user_choice = int(input("Please enter what you would like to do: "))
@@ -121,12 +121,17 @@ while True:
                 # create account 
                 username = input("What would you like your username to be? ")
                 password = input("What would you like your password to be? ")
-                # acct.createAccount(username, password)
-                print("Account has been created.")
+                acct.createAccount(username, password)
+                print("Account has been created, and you have been logged in.")
+                afterLogin() # takes user to after login menu
                 
         elif user_choice == "3":
-                print("Bye!")
-                break # this may take user to after login menu 
-                      # check that 
+                if acct.logOut() == True:
+                        print("You have been logged out. Bye!")
+                        break
+                else:
+                        print("You weren't logged in. Exiting Program.")
+                        break
+                
         else:
                 print("Invalid choice. Try again.")
