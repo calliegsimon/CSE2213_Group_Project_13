@@ -1,5 +1,5 @@
 import sqlite3
-import inventory
+from inventory import Inventory
 
 # makes cart class
 class cart:
@@ -29,8 +29,6 @@ class cart:
         # expected to output ISBN, title, author, and quantity for each book in cart
         for i in books:
             print(i)
-
-        # i think this is done, need to check that it runs as expected
     
     def addToCart(self, userID, ISBN):
         # use selected ISBN to add to user's cart
@@ -39,25 +37,31 @@ class cart:
         customerID = userID
         bookID = ISBN
 
-        checking_Cart = f"SELECT ISBN FROM {self.table_name} WHERE UserID = '{customerID}';"
+        checking_Cart = f"SELECT {self.table_name}.ISBN FROM {self.table_name} WHERE UserID = '{customerID}';"
         print(checking_Cart)
         self.cursor.execute(checking_Cart)
 
         customerCart = self.cursor.fetchall()
-
+        
         # if cart is not empty
         if customerCart:
-            # updating quantity if book is already in the cart
-            if bookID in customerCart:
+
+            # searches for given book in cart
+            update_query = f"SELECT * FROM {self.table_name} WHERE ISBN LIKE '{bookID}';"
+            self.cursor.execute(update_query)
+            alreadyThere = self.cursor.fetchall()
+
+            # if book is already in the cart
+            if alreadyThere:
                 print("in cart")
-                add_query = f"UPDATE Cart SET Quantity = Quantity + 1 WHERE ISBN = '{bookID}';"
+                add_query = f"UPDATE {self.table_name} SET Quantity = Quantity+1 WHERE ISBN = '{bookID}';"
                 self.cursor.execute(add_query)
 
             # if book is not already in cart
             else:
-            print("not in cart")
-            newbook_query = f"INSERT INTO {self.table_name} (UserID, ISBN, Quantity) VALUES ('{customerID}', '{bookID}', '1');"
-            self.cursor.execute(newbook_query)
+                print("not in cart")
+                newbook_query = f"INSERT INTO {self.table_name} (UserID, ISBN, Quantity) VALUES ('{customerID}', '{bookID}', '1');"
+                self.cursor.execute(newbook_query)
 
         else:
             adding_query = f"INSERT INTO {self.table_name} (UserID, ISBN, Quantity) VALUES ('{customerID}', '{bookID}', '1');"
@@ -69,21 +73,34 @@ class cart:
 
     def removeFromCart(self, userID, ISBN):
         # use selected ISBN to remove from user's cart
-        
-        
-        checkCart_query = f"SELECT ISBN FROM {self.table_name} where UserID = '{userID}';"
+        # self.cursor.execute('''DELETE FROM Cart''')
+        bookID = str(ISBN)
+
+        checkCart_query = f"SELECT {self.table_name}.ISBN FROM {self.table_name} WHERE UserID = '{userID}';"
         self.cursor.execute(checkCart_query)
 
         userCart = self.cursor.fetchall()
+        print(userCart)
 
-        # checks that given book is in cart
-        if ISBN in userCart:
-            remove_query = f"UPDATE Cart SET Quantity = Quantity - 1 WHERE ISBN = '{ISBN}'"
-            self.cursor.execute(remove_query)
-            self.cursor.execute("DELETE FROM Cart WHERE Quantity = '0'") # deletes the book from cart if quantity=0
+        # checks that cart isn't already empty
+        if userCart:
 
-        else: 
-            print("Selected book not in cart. Unable to remove.")
+            # searches for given book in cart
+            update_query = f"SELECT * FROM {self.table_name} WHERE ISBN LIKE '{bookID}';"
+            self.cursor.execute(update_query)
+            foundBook = self.cursor.fetchall()
+
+            # checks that given book is in cart
+            if foundBook:
+                remove_query = f"UPDATE {self.table_name} SET Quantity = Quantity - 1 WHERE ISBN = '{bookID}';"
+                self.cursor.execute(remove_query)
+                self.cursor.execute("DELETE FROM Cart WHERE Quantity=0;") # deletes the book from cart if quantity=0
+
+            else: 
+                print("Selected book not in cart. Unable to remove.")
+
+        else:
+            print("Cart is empty. Nothing to remove.")
 
         # save changes
         self.connection.commit()
@@ -92,7 +109,7 @@ class cart:
         # calls decreaseStock function from inventory class
         # removes all items in user's cart
         
-        cart_inven = inventory("Store_Database.db", "Inventory") # creates an inventory class object so we can call decreaseStock
+        cart_inven = Inventory("Store_Database.db", "Inventory") # creates an inventory class object so we can call decreaseStock
         
         #decreaseStock(ISBN) for every book in cart
         decrease_query = f"SELECT ISBN, Quantity FROM {self.table_name} WHERE UserID = '{userID}'"
@@ -100,12 +117,10 @@ class cart:
 
         dec = self.cursor.fetchall()
         
-        for row in dec:
-            book = {self.table_name}.ISBN
-
-            while {self.table_name}.Quantity > 0:
-                cart_inven.decreaseStock(book)
-                num_update = f"UPDATE Cart SET Quantity = Quantity - 1 WHERE ISBN = '{book}'"
+        for book in dec:
+            while book[1] > 0:
+                cart_inven.decreaseStock(book[0])
+                num_update = f"UPDATE Cart SET Quantity = Quantity - 1 WHERE ISBN = '{book[0]}'"
                 self.cursor.execute(num_update)
         
         # once all stock has been decreased
@@ -119,10 +134,3 @@ class cart:
         self.cursor.close()
         self.connection.close()
         
-# outside class
-myCart = cart("Store_Database.db", "Cart")
-myCart.addToCart("anw734", 9781501142970)
-myCart.viewCart("anw734", "Inventory")
-myCart.closeConnection()
-
-
