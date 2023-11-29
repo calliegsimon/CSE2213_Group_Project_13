@@ -1,12 +1,12 @@
 import sqlite3
 import inventory
 import cart
-import Account
+import account
 
 #creating class objects and variables
-acct = Account()
-myCart = cart('Store_Database.db', 'Cart')
-storeInven = Inventory('Store_Database.db', 'Inventory')
+acct = account.Account()
+myCart = cart.cart('Store_Database.db', 'Cart')
+storeInven = inventory.Inventory('Store_Database.db', 'Inventory')
 username = ""
 password = ""
 
@@ -53,7 +53,7 @@ def afterLogin():
                                         print("Invalid option. Try again.")
                         
                 elif user_choice == "2":
-                    # add in logic for looking at inventory infortmation
+                    # inventory menu
                     print("Invetory Information Menu")
                     print("1. Go Back")
                     print("2. View Inventory")
@@ -76,7 +76,7 @@ def afterLogin():
                         print("Invalid choice.")
 
                 elif user_choice == "3":
-                    # cart information
+                    # cart menu
                     print("Cart Information Menu")
                     print("1. Go Back")
                     print("2. View Cart")
