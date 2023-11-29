@@ -1,5 +1,6 @@
 git_ignore_file_test
 inv_test
+cart_test
 helpful_resources
 *.pyc
 *.log

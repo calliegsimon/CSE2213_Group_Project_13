@@ -67,7 +67,7 @@ class Inventory:
 
     def close_connection(self):
         # method to close the connection to the sqlite db
-
+        self.cursor.close()
         #close the db connection
         self.connection.close()
         # the 'close' method is called on the connection object to terminate the connection
