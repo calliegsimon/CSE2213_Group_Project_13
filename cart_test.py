@@ -22,8 +22,8 @@ class TestCart_Inventory:
         test_inven = Inventory("anw734", "Inventory")
 
         test_cart = cart("Store_Database.db", "Cart")
-        test_cart.addToCart("anw734", 9780307278449)
-        test_cart.addToCart("anw734", 9780307278449)
+        test_cart.addToCart("anw734", '9780307278449')
+        test_cart.addToCart("anw734", '9780307278449')
         test_cart.checkOut("anw734")
 
         #verify
