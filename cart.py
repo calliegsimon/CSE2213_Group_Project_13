@@ -46,9 +46,9 @@ class cart:
         customerCart = self.cursor.fetchall()
         
         # updating quantity if book is already in the cart
-        if ISBN in customerCart:
+        if bookID in customerCart:
             print("in cart")
-            add_query = '''UPDATE Cart SET Quantity = Quantity + 1 WHERE ISBN = '{ISBN}';'''
+            add_query = f"UPDATE Cart SET Quantity = Quantity + 1 WHERE ISBN = '{bookID}';"
             self.cursor.execute(add_query)
 
         # if book is not already in cart
