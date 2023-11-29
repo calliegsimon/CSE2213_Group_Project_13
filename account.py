@@ -107,6 +107,21 @@ class Account:
         cur.execute("UPDATE Account SET IsAdmin=? WHERE Username=?", params)
         con.commit()
 
+    def deleteAccount(self):
+        cur.execute("DELETE FROM Account WHERE Username=?", self.username)
+        con.commit()
+        self.loggedIn = False
+        self.username = ""
+        self.password = ""
+        self.fullName = ""
+        self.fullAddress = ""
+        self.email = ""
+        self.payment = ""
+        self.isAdmin = 0
+
     def loginCheck(self):
         return self.loggedIn
+
+    def getUsername(self):
+        return self.username
 con.close()
