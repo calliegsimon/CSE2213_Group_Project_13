@@ -44,18 +44,24 @@ class cart:
         self.cursor.execute(checking_Cart)
 
         customerCart = self.cursor.fetchall()
-        
-        # updating quantity if book is already in the cart
-        if ISBN in customerCart:
-            print("in cart")
-            add_query = '''UPDATE Cart SET Quantity = Quantity + 1 WHERE ISBN = '{ISBN}';'''
-            self.cursor.execute(add_query)
 
-        # if book is not already in cart
-        else:
+        # if cart is not empty
+        if customerCart:
+            # updating quantity if book is already in the cart
+            if bookID in customerCart:
+                print("in cart")
+                add_query = f"UPDATE Cart SET Quantity = Quantity + 1 WHERE ISBN = '{bookID}';"
+                self.cursor.execute(add_query)
+
+            # if book is not already in cart
+            else:
             print("not in cart")
-            newbook_query = """INSERT INTO Cart (UserID, ISBN, Quantity) VALUES ('customerID', 'bookID', '1');"""
+            newbook_query = f"INSERT INTO {self.table_name} (UserID, ISBN, Quantity) VALUES ('{customerID}', '{bookID}', '1');"
             self.cursor.execute(newbook_query)
+
+        else:
+            adding_query = f"INSERT INTO {self.table_name} (UserID, ISBN, Quantity) VALUES ('{customerID}', '{bookID}', '1');"
+            self.cursor.execute(adding_query)
 
         # save changes to table
         self.connection.commit()
