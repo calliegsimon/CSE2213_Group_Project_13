@@ -1,4 +1,3 @@
-import sqlite3
 import inventory
 import cart
 import account
@@ -12,7 +11,7 @@ password = ""
 
 def afterLogin():
         # after login menu
-        while user.loginCheck() is True:
+        while acct.loginCheck() is True:
                 print("Main Menu")
                 print("1. View Account Information")
                 print("2. Inventory Information")
@@ -21,7 +20,7 @@ def afterLogin():
 
                 user_choice = int(input("Enter your choice: "))
 
-                if user_choice is 1:
+                if user_choice == 1:
                         while True:
                                 acct.displayAccount()
                                 print("1. Go back")
@@ -30,29 +29,29 @@ def afterLogin():
                                 print("4. Edit email address")
                                 print("5. Edit payment info")
                                 print("6. Delete account")
-                                acct_choice = int(input("Enter your choice: ")
+                                acct_choice = int(input("Enter your choice: "))
 
-                                if acct_choice is 1:
+                                if acct_choice == 1:
                                         break
-                                elif acct_choice is 2:
+                                elif acct_choice == 2:
                                         name = input("Enter the new name: ")
                                         acct.nameEdit(name)
-                                elif acct_choice is 3:
+                                elif acct_choice == 3:
                                         add = input("Enter the new address: ")
                                         acct.addressEdit(add)
-                                elif acct_choice is 4:
+                                elif acct_choice == 4:
                                         email = input("Enter the new email address: ")
                                         acct.emailEdit(email)
-                                elif acct_choice is 5:
+                                elif acct_choice == 5:
                                         pay = input("Enter the new payment information: ")
                                         acct.paymentEdit(pay)
-                                elif acct_choice is 6:
+                                elif acct_choice == 6:
                                         acct.deleteAccount()
                                         break
                                 else:
                                         print("Invalid option. Try again.")
                         
-                elif user_choice == "2":
+                elif user_choice == 2:
                     # inventory menu
                     print("Invetory Information Menu")
                     print("1. Go Back")
@@ -62,20 +61,20 @@ def afterLogin():
 
                     inv_choice = int(input("Please enter your choice:  "))
 
-                    if inv_choice == "1":
+                    if inv_choice == 1:
                         #go back
                         break
                         # adding the break statement should return it back to the main menu. 
-                    elif inv_choice == "2":
+                    elif inv_choice == 2:
                         inventory.viewInventory()
-                    elif inv_choice == "3":
+                    elif inv_choice == 3:
                         print("Please enter the title of the book you are looking for: ")
                         search_title = str(input("Please enter the title of the book you are looking for: "))
                         inventory.searchInventory(search_title)
                     else:
                         print("Invalid choice.")
 
-                elif user_choice == "3":
+                elif user_choice == 3:
                     # cart menu
                     print("Cart Information Menu")
                     print("1. Go Back")
@@ -84,37 +83,38 @@ def afterLogin():
                     print("4. Remove an Item From Cart")
                     print("5. Check Out")
 
+                    userID = acct.getUsername()
                     cart_choice = int(input("Enter your choice: "))
                     
-                    if cart_choice == "1":
+                    if cart_choice == 1:
                         # go back
                         break
                 
-                    elif cart_choice == "2":
+                    elif cart_choice == 2:
                         # view cart
-                        myCart.viewCart(userID, 'Store_Database.db') # does "Store_Database.db" need to be changed to "Cart"
+                        myCart.viewCart(userID, "Inventory") 
 
-                    elif cart_choice == "3":
+                    elif cart_choice == 3:
                         # add to cart
-                        myInventory.viewInventory()
+                        storeInven.viewInventory()
                         book_add = int(input("Enter the ISBN of the book you want to add to your cart: "))
                         myCart.addToCart(userID, book_add)
 
-                    elif cart_choice == "4":
+                    elif cart_choice == 4:
                         # remove from cart
                         myCart.viewCart(userID, 'Store_Database.db') # same note as when cart_choice == "2"
                         book_remove = int(input("Enter the ISBN of the book you want to remove from your cart: "))
                         myCart.removeFromCart(userID, book_remove)
                         
-                    elif cart_choice == "5":
+                    elif cart_choice == 5:
                         # check out
                         myCart.checkOut(userID)
                         
                     else:
                         print("Invalid choice.")
                 
-                elif user_choice == "4":
-                        if logOut() == True:
+                elif user_choice == 4:
+                        if acct.logOut() == True:
                                 print("You are logged out. Bye!")
                                 break
                 else:
@@ -131,18 +131,18 @@ while True:
 
         user_choice = int(input("Please enter what you would like to do: "))
 
-        if user_choice == "1":
+        if user_choice == 1:
                 # login
                 username = input("Please enter your username: ")
                 password = input("Please enter your password: ")
-                # acct.logIn(username, password)
+                acct.logIn(username, password)
                 if acct.logIn(username, password) == True:
                         print("You are logged in!")
                         afterLogin() # should take user to after login menu
                 else:
                         print("Login unsuccessful.")
                         
-        elif user_choice == "2":
+        elif user_choice == 2:
                 # create account 
                 username = input("What would you like your username to be? ")
                 password = input("What would you like your password to be? ")
@@ -151,9 +151,17 @@ while True:
                         print("Account has been created, and you have been logged in.")
                         afterLogin() # takes user to after login menu
                         
-        elif user_choice == "3":
+        elif user_choice == 3:
                 #i figure this should be fine because there's no way to get to the acct creation/login screen while logged in. 
                 print("Bye!")
+                break
+                
+        else:
+                print("Invalid choice. Try again.")
+
+myCart.closeConnection()
+storeInven.close_connection()
+
                 break
                 
         else:
