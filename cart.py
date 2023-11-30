@@ -115,11 +115,13 @@ class cart:
         dec = self.cursor.fetchall()
         
         for book in dec:
-            while book[1] > 0:
+            i = book[1]
+            while i > 0:              
                 bookISBN = str(book[0])
                 cart_inven.decreaseStock(bookISBN)
-                num_update = f"UPDATE Cart SET Quantity = Quantity - 1 WHERE ISBN = '{book[0]}'"
+                num_update = f"UPDATE Cart SET Quantity = Quantity - 1 WHERE ISBN = '{bookISBN}'"
                 self.cursor.execute(num_update)
+                i = i - 1
         
         # once all stock has been decreased
         checkOut_query = f"DELETE FROM {self.table_name} WHERE UserID = '{userID}'"
