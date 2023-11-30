@@ -118,9 +118,8 @@ class cart:
             i = book[1]
             while i > 0:              
                 bookISBN = str(book[0])
-                cart_inven.decreaseStock(bookISBN)
-                num_update = f"UPDATE Cart SET Quantity = Quantity - 1 WHERE ISBN = '{bookISBN}'"
-                self.cursor.execute(num_update)
+                print(bookISBN)
+                cart_inven.decreaseStock(str(bookISBN))
                 i = i - 1
         
         # once all stock has been decreased
